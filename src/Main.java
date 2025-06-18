@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             Scanner scan = new Scanner(uploadTxtFile());
-            ArrayList<Objects[]> lineInfo = new ArrayList<>();
+            ArrayList<DataPoint> lineInfo = new ArrayList<>();
             //order: year, month, day, yearasFraction, sunspot #, standard deviation; # observations, prov indicator
             do{
                 String line = scan.nextLine();

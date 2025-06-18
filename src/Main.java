@@ -17,16 +17,28 @@ public class Main {
                 int length = line.length();
                 String type = "";
                 if(length == 37){
-                 //daily and monthly = 37
-                    int year = Integer.parseInt(line.substring(0,4));
-                    int month = Integer.parseInt(line.substring(5,7));
-                    int day = Integer.parseInt(line.substring(8,10));
-                    double yrAsDec = Double.parseDouble(line.substring(11,19));
-                    int sunspotNum = Integer.parseInt(line.substring(21,24));
-                    double standDev = Double.parseDouble(line.substring(25,30));
-                    int numObs = Integer.parseInt(line.substring(31,35));
-                    String provInd = line.substring(36);
-                    type = "daily";
+                    Scanner scan2 = new Scanner(System.in);
+                    System.out.println("Please type the type of data you have entered (daily or monthly)");
+                    type = scan2.nextLine();
+                    if(type.equalsIgnoreCase("daily")){
+                        int year = Integer.parseInt(line.substring(0, 4));
+                        int month = Integer.parseInt(line.substring(5, 7));
+                        int day = Integer.parseInt(line.substring(8, 10));
+                        double yrAsDec = Double.parseDouble(line.substring(11, 19));
+                        int sunspotNum = Integer.parseInt(line.substring(21, 24));
+                        double standDev = Double.parseDouble(line.substring(25, 30));
+                        int numObs = Integer.parseInt(line.substring(31, 35));
+                        String provInd = line.substring(36);
+                    }else {
+                        int year = Integer.parseInt(line.substring(0, 4));
+                        int month = Integer.parseInt(line.substring(5, 7));
+                        double yrAsDec = Double.parseDouble(line.substring(8, 16));
+                        int sunspotNum = Integer.parseInt(line.substring(18, 23));
+                        double standDev = Double.parseDouble(line.substring(24, 29));
+                        int numObs = Integer.parseInt(line.substring(31, 35));
+                        String provInd = line.substring(36);
+
+                    }
                 } else if (length == 28) {
                     double yrAsDec = Double.parseDouble(line.substring(0,7));
                     int sunspotNum = Integer.parseInt(line.substring(8,13));
@@ -44,9 +56,27 @@ public class Main {
                     double standDev = Double.parseDouble(line.substring(34,39));
                     double nStandDev = Double.parseDouble(line.substring(40,45));
                     double sStandDev = Double.parseDouble(line.substring(45,51));
-                    int numObs = Integer.parseInt(line.substring(31,35));
-                    String provInd = line.substring(36);
+                    int numObs = Integer.parseInt(line.substring(53,56));
+                    int nNumObs = Integer.parseInt(line.substring(57,60));
+                    int sNumObs = Integer.parseInt(line.substring(61,64));
+                    String provInd = line.substring(65);
                     type = "hemDaily";
+                }else if(length == 72){
+                    int year = Integer.parseInt(line.substring(0,4));
+                    int month = Integer.parseInt(line.substring(5,7));
+                    double yrAsDec = Double.parseDouble(line.substring(8,16));
+                    int sunspotNum = Integer.parseInt(line.substring(18,23));
+                    int nSunspotNum = Integer.parseInt(line.substring(24,29));
+                    int sSunspotNum = Integer.parseInt(line.substring(30,35));
+                    double standDev = Double.parseDouble(line.substring(37,42));
+                    double nStandDev = Double.parseDouble(line.substring(43,48));
+                    double sStandDev = Double.parseDouble(line.substring(49,54));
+                    int numObs = Integer.parseInt(line.substring(56,60));
+                    int nNumObs = Integer.parseInt(line.substring(61,65));
+                    int sNumObs = Integer.parseInt(line.substring(66,70));
+                    String provInd = line.substring(71);
+                    type = "hemMonthly";
+
                 }else {
 
                 }

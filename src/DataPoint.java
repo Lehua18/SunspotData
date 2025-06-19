@@ -1,96 +1,85 @@
+import java.util.ArrayList;
+
 public class DataPoint {
-    private int year;
-    private int month;
-    private int day;
-    private double yrAsDec;
-    private int sunspotNum;
-    private int nSunspotNum;
-    private int sSunspotNum;
-    private double standDev;
-    private double nStandDev;
-    private double sStandDev;
-    private int numObs;
-    private int nNumObs;
-    private int sNumObs;
+    private int year = -1;
+    private int month = -1;
+    private int day = -1;
+    private double yrAsDec =-1.0;
+    private int sunspotNum = -1;
+    private int nSunspotNum = -1;
+    private int sSunspotNum = -1;
+    private double standDev =-1.0;
+    private double nStandDev =-1.0;
+    private double sStandDev = -1.0;
+    private int numObs = -1;
+    private int nNumObs = -1;
+    private int sNumObs = -1;
     private String provInd;
     private String type;
 
 
-    //constructor for hemDaily
-    public DataPoint(int year, int month, int day, double yrAsDec, int sunspotNum, int nSunspotNum, int sSunspotNum, double standDev, double nStandDev,   double sStandDev, int numObs, int nNumObs, int sNumObs, String provInd, String type){
-        year = this.year;
-        month = this.month;
-        day = this.day;
-        yrAsDec = this.yrAsDec;
-        sunspotNum = this.sunspotNum;
-        nSunspotNum = this.nSunspotNum;
-        sSunspotNum = this.sSunspotNum;
-        standDev = this.standDev;
-        nStandDev = this.nStandDev;
-        sStandDev = this.sStandDev;
-        numObs = this.numObs;
-        nNumObs = this.nNumObs;
-        sNumObs = this.sNumObs;
-        provInd = this.provInd;
-        type = this.type;
-    }
+  public DataPoint(ArrayList<String> data){
+      if(data.size() == 8){
+          year = Integer.parseInt(data.get(0));
+          month = Integer.parseInt(data.get(1));
+          day = Integer.parseInt(data.get(2));
+          yrAsDec = Double.parseDouble(data.get(3));
+          sunspotNum = Integer.parseInt(data.get(4));
+          standDev = Double.parseDouble(data.get(5));
+          numObs = Integer.parseInt(data.get(6));
+          provInd = data.get(7);
+          type = "daily";
 
-    //constructor for hemMonthly
-    public DataPoint(int year, int month, double yrAsDec, int sunspotNum, int nSunspotNum, int sSunspotNum, double standDev, double nStandDev,   double sStandDev, int numObs, int nNumObs, int sNumObs, String provInd, String type){
-        year = this.year;
-        month = this.month;
-        yrAsDec = this.yrAsDec;
-        sunspotNum = this.sunspotNum;
-        nSunspotNum = this.nSunspotNum;
-        sSunspotNum = this.sSunspotNum;
-        standDev = this.standDev;
-        nStandDev = this.nStandDev;
-        sStandDev = this.sStandDev;
-        numObs = this.numObs;
-        nNumObs = this.nNumObs;
-        sNumObs = this.sNumObs;
-        provInd = this.provInd;
-        type = this.type;
+      }else if(data.size() == 7){
+          year = Integer.parseInt(data.get(0));
+          month = Integer.parseInt(data.get(1));
+          yrAsDec = Double.parseDouble(data.get(2));
+          sunspotNum = Integer.parseInt(data.get(3));
+          standDev = Double.parseDouble(data.get(4));
+          numObs = Integer.parseInt(data.get(5));
+          provInd = data.get(6);
+          type = "monthly";
+      }else if(data.size() == 5){
+          yrAsDec = Double.parseDouble(data.get(0));
+          sunspotNum = Integer.parseInt(data.get(1));
+          standDev = Double.parseDouble(data.get(2));
+          numObs = Integer.parseInt(data.get(3));
+          provInd = data.get(4);
+          type = "yearly";
+      } else if (data.size() == 14) {
+          year = Integer.parseInt(data.get(0));
+          month = Integer.parseInt(data.get(1));
+          day = Integer.parseInt(data.get(2));
+          yrAsDec = Double.parseDouble(data.get(3));
+          sunspotNum = Integer.parseInt(data.get(4));
+          nSunspotNum = Integer.parseInt(data.get(5));
+          sSunspotNum = Integer.parseInt(data.get(6));
+          standDev = Double.parseDouble(data.get(7));
+          nStandDev = Double.parseDouble(data.get(8));
+          sStandDev = Double.parseDouble(data.get(9));
+          numObs = Integer.parseInt(data.get(10));
+          nNumObs = Integer.parseInt(data.get(11));
+          sNumObs = Integer.parseInt(data.get(12));
+          provInd = data.get(13);
+          type = "hemDaily";
+      }else if(data.size() == 13){
+          year = Integer.parseInt(data.get(0));
+          month = Integer.parseInt(data.get(1));
+          yrAsDec = Double.parseDouble(data.get(2));
+          sunspotNum = Integer.parseInt(data.get(3));
+          nSunspotNum = Integer.parseInt(data.get(4));
+          sSunspotNum = Integer.parseInt(data.get(5));
+          standDev = Double.parseDouble(data.get(6));
+          nStandDev = Double.parseDouble(data.get(7));
+          sStandDev = Double.parseDouble(data.get(8));
+          numObs = Integer.parseInt(data.get(9));
+          nNumObs = Integer.parseInt(data.get(10));
+          sNumObs = Integer.parseInt(data.get(11));
+          provInd = data.get(12);
+          type = "hemMonthly";
+      }
 
-    }
-
-    //constructor for daily
-    public DataPoint(int year, int month, int day, double yrAsDec, int sunspotNum, double standDev, int numObs, String provInd, String type){
-        year = this.year;
-        month = this.month;
-        day = this.day;
-        yrAsDec = this.yrAsDec;
-        sunspotNum = this.sunspotNum;
-        standDev = this.standDev;
-        numObs = this.numObs;
-        provInd = this.provInd;
-        type = this.type;
-
-    }
-
-    //constructor for monthly
-    public DataPoint(int year, int month, double yrAsDec, int sunspotNum, double standDev, int numObs, String provInd, String type){
-        year = this.year;
-        month = this.month;
-        yrAsDec = this.yrAsDec;
-        sunspotNum = this.sunspotNum;
-        standDev = this.standDev;
-        numObs = this.numObs;
-        provInd = this.provInd;
-        type = this.type;
-
-    }
-
-    //constructor for yearly
-    public DataPoint( double yrAsDec, int sunspotNum, double standDev, int numObs, String provInd, String type){
-        yrAsDec = this.yrAsDec;
-        sunspotNum = this.sunspotNum;
-        standDev = this.standDev;
-        numObs = this.numObs;
-        provInd = this.provInd;
-        type = this.type;
-
-    }
+  }
 
     //getters
     public int getDay() {
@@ -146,7 +135,52 @@ public class DataPoint {
 
     //toString
     public String toString(){
-        return
+        String returnString = "";
+        returnString+=getYrAsDec()+":\n";
+        if(year != -1) {
+            returnString += "\t(" + year;
+            if (month != -1) {
+                returnString += "/" + getMonth();
+
+                if (day != -1) {
+                    returnString += "/" + day;
+                }
+            }
+            returnString+=")\n";
+        }
+        if(sunspotNum != -1) {
+            returnString += "\tMean sunspot number: " + sunspotNum;
+            if(nSunspotNum != -1){
+                returnString += "\n\t\tNorth mean sunspot number: "+nSunspotNum;
+            }
+            if (sSunspotNum != -1) {
+                returnString += "\n\t\tSouth mean sunspot number: " + sSunspotNum;
+            }
+            returnString += "\n";
+        }
+        if(standDev != -1) {
+            returnString += "\tMean standard deviation: " + standDev;
+            if(nStandDev != -1){
+                returnString += "\n\t\tNorth mean standard deviation: "+nStandDev;
+            }
+            if (sStandDev != -1) {
+                returnString += "\n\t\tSouth mean standard deviation: " + sStandDev;
+            }
+            returnString += "\n";
+        }
+        if(numObs != -1) {
+            returnString += "\tNumber of observations: " + numObs;
+            if(nSunspotNum != -1){
+                returnString += "\n\t\tNorth number of observations: "+nNumObs;
+            }
+            if (sSunspotNum != -1) {
+                returnString += "\n\t\tSouth number of observations: " + sNumObs;
+            }
+            returnString += "\n";
+        }
+        returnString+="\tProvisional: "+provInd;
+        returnString+="\n\tType: "+type;
+        return returnString;
     }
 
 }

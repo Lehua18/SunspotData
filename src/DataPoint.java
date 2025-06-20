@@ -16,6 +16,7 @@ public class DataPoint {
     private int sNumObs = -1;
     private String provInd;
     private String type;
+    private boolean provBool;
 
 
   public DataPoint(ArrayList<String> data){
@@ -78,6 +79,7 @@ public class DataPoint {
           provInd = data.get(12);
           type = "hemMonthly";
       }
+      provBool = provInd.equals("*");
 
   }
 
@@ -133,6 +135,10 @@ public class DataPoint {
         return type;
     }
 
+    public boolean isProv() {
+        return provBool;
+    }
+
     //toString
     public String toString(){
         String returnString = "";
@@ -178,7 +184,7 @@ public class DataPoint {
             }
             returnString += "\n";
         }
-        returnString+="\tProvisional: "+provInd;
+        returnString+="\tProvisional: "+provBool;
         returnString+="\n\tType: "+type;
         return returnString;
     }

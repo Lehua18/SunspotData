@@ -17,7 +17,7 @@ public class Main {
                 ArrayList<String> dataPoint = new ArrayList<>();
                 String line = scan.nextLine();
                 int length = line.length();
-                while(count< length-1){
+                while(count< length){
                     dataPoint.add(getValuesFromTxt(line));
                 }
                 allData.add(new DataPoint(dataPoint));
@@ -61,18 +61,21 @@ public class Main {
         StringBuilder data = new StringBuilder();
         while (!stop) {
             if (count >= line.length()){
+                //failsafe
                 stop = true;
             }else if (line.charAt(count) != ' ') {
+                //Adds character to StringBuilder if the character is not a space.
                 data.append(line.charAt(count));
             }else if(count == line.length()-1) {
-                data.append(" ");
+                data.append('.');
                 stop = true;
             }else if(line.charAt(count) == ' ' && !data.isEmpty()){
+                //stops the function once the function reaches another space.
                 stop = true;
             }
             count++;
         }
-       // System.out.println("DATA: "+data);
+     //   System.out.println("DATA: "+data);
         return data.toString();
     }
 }

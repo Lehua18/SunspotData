@@ -5,9 +5,9 @@ public class DataPoint {
     private int month = -1;
     private int day = -1;
     private double yrAsDec =-1.0;
-    private int sunspotNum = -1;
-    private int nSunspotNum = -1;
-    private int sSunspotNum = -1;
+    private double sunspotNum = -1;
+    private double nSunspotNum = -1;
+    private double sSunspotNum = -1;
     private double standDev =-1.0;
     private double nStandDev =-1.0;
     private double sStandDev = -1.0;
@@ -24,7 +24,7 @@ public class DataPoint {
           month = Integer.parseInt(data.get(1));
           day = Integer.parseInt(data.get(2));
           yrAsDec = Double.parseDouble(data.get(3));
-          sunspotNum = Integer.parseInt(data.get(4));
+          sunspotNum = Double.parseDouble(data.get(4));
           standDev = Double.parseDouble(data.get(5));
           numObs = Integer.parseInt(data.get(6));
           provInd = data.get(7);
@@ -34,14 +34,14 @@ public class DataPoint {
           year = Integer.parseInt(data.get(0));
           month = Integer.parseInt(data.get(1));
           yrAsDec = Double.parseDouble(data.get(2));
-          sunspotNum = Integer.parseInt(data.get(3));
+          sunspotNum = Double.parseDouble(data.get(3));
           standDev = Double.parseDouble(data.get(4));
           numObs = Integer.parseInt(data.get(5));
           provInd = data.get(6);
           type = "monthly";
       }else if(data.size() == 5){
           yrAsDec = Double.parseDouble(data.get(0));
-          sunspotNum = Integer.parseInt(data.get(1));
+          sunspotNum = Double.parseDouble(data.get(1));
           standDev = Double.parseDouble(data.get(2));
           numObs = Integer.parseInt(data.get(3));
           provInd = data.get(4);
@@ -51,9 +51,9 @@ public class DataPoint {
           month = Integer.parseInt(data.get(1));
           day = Integer.parseInt(data.get(2));
           yrAsDec = Double.parseDouble(data.get(3));
-          sunspotNum = Integer.parseInt(data.get(4));
-          nSunspotNum = Integer.parseInt(data.get(5));
-          sSunspotNum = Integer.parseInt(data.get(6));
+          sunspotNum = Double.parseDouble(data.get(4));
+          nSunspotNum = Double.parseDouble(data.get(5));
+          sSunspotNum = Double.parseDouble(data.get(6));
           standDev = Double.parseDouble(data.get(7));
           nStandDev = Double.parseDouble(data.get(8));
           sStandDev = Double.parseDouble(data.get(9));
@@ -66,9 +66,9 @@ public class DataPoint {
           year = Integer.parseInt(data.get(0));
           month = Integer.parseInt(data.get(1));
           yrAsDec = Double.parseDouble(data.get(2));
-          sunspotNum = Integer.parseInt(data.get(3));
-          nSunspotNum = Integer.parseInt(data.get(4));
-          sSunspotNum = Integer.parseInt(data.get(5));
+          sunspotNum = Double.parseDouble(data.get(3));
+          nSunspotNum = Double.parseDouble(data.get(4));
+          sSunspotNum = Double.parseDouble(data.get(5));
           standDev = Double.parseDouble(data.get(6));
           nStandDev = Double.parseDouble(data.get(7));
           sStandDev = Double.parseDouble(data.get(8));
@@ -105,13 +105,13 @@ public class DataPoint {
         return standDev;
     }
 
-    public int getSunspotNum() {
+    public double getSunspotNum() {
         return sunspotNum;
     }
-    public int getnSunspotNum() {
+    public double getnSunspotNum() {
         return nSunspotNum;
     }
-    public int getsSunspotNum() {
+    public double getsSunspotNum() {
         return sSunspotNum;
     }
 

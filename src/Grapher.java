@@ -1,21 +1,119 @@
+//3D Graph and stylers
 import com.rinearn.graph3d.RinearnGraph3D;
+
+//2D Graph and Stylers
 import org.knowm.xchart.*;
 import org.knowm.xchart.XYSeries.XYSeriesRenderStyle;
-import java.util.Scanner;
 import org.knowm.xchart.style.*;
 import org.knowm.xchart.SwingWrapper.*;
-import org.knowm.xchart.style.Styler.*;
+import org.knowm.xchart.style.AxesChartStyler;
+import org.knowm.xchart.style.colors.*;
+import org.knowm.xchart.style.lines.SeriesLines;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
+//Math Stuff
+import org.apache.commons.math4.legacy.fitting.*;
+import org.apache.commons.math4.legacy.optim.*;
+import org.apache.commons.math4.legacy.fitting.PolynomialCurveFitter;
+import org.apache.commons.math4.legacy.fitting.WeightedObservedPoint;
+import org.apache.commons.math4.legacy.fitting.AbstractCurveFitter.*;
+
+//General Imports
+import java.awt.*;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class Grapher {
+    //3D Grapher
     public Grapher(double[] x, double[] y, double[] z) {
         RinearnGraph3D graph = new RinearnGraph3D();
     }
+
+    //2D Grapher
     public Grapher(double[] x, double[] y){
-        XYChart graph = QuickChart.getChart("name", "x","y","x(y)",x,y);
-//        graph.getStyler().setDefaultSeriesRenderStyle(XYSeriesRenderStyle.Scatter);
-        Styler styler = graph.getStyler();
-        styler.setXAxisTitleColor()
-        new SwingWrapper(graph).displayChart();
+        //Get endpoints
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please choose a starting year");
+        double startDate = Double.parseDouble(scan.nextLine());
+        System.out.println("Please choose an ending year");
+        double endDate = Double.parseDouble(scan.nextLine());
+        int startIndex = -1;
+        int endIndex = -1;
+        boolean foundStart = false;
+        boolean foundEnd = false;
+        for(int i = 0; i<x.length; i++){
+            if(x[i] >= startDate && !foundStart){
+                startIndex = i;
+                System.out.println("Start: "+startIndex);
+                foundStart = true;
+            }
+            if (x[i] >= endDate && !foundEnd){
+                endIndex = i-1;
+                System.out.println("End: "+endIndex);
+                foundEnd = true;
+            }
+        }
+
+        //Create new arrays with only data in the time range
+        double[] xTruncData = new double[endIndex-startIndex+1];
+        double[] yTruncData = new double[endIndex-startIndex+1];
+        int count = 0;
+        for(int j = startIndex; j<=endIndex; j++){
+            xTruncData[count] = x[j];
+            yTruncData[count] = y[j];
+            count++;
+        }
+
+        //Curve fitting
+        Collection<WeightedObservedPoint> points = new ArrayList<>();
+        for(int k = 0; k<xTruncData.length; k++){
+            points.add(new WeightedObservedPoint(1, xTruncData[k], yTruncData[k]));
+        }
+        PolynomialCurveFitter fitter = PolynomialCurveFitter.create(10);
+//        fitter = fitter.getO
+        double[] coefficients = fitter.fit(points);
+        for (double c : coefficients){
+            System.out.print(c+" ");
+        }
+
+        //Create 2D graph
+        XYChart chart = new XYChartBuilder().width(800).height(600).title("Sunspot Number Over Time").xAxisTitle("Time (years)").yAxisTitle("Sunspot Number").build();
+        // Customize Chart
+        chart.getStyler().setPlotBackgroundColor(Color.WHITE);
+        chart.getStyler().setPlotGridLinesVisible(true);
+        chart.getStyler().setPlotGridLinesColor(Color.GRAY);
+
+        chart.getStyler().setChartBackgroundColor(Color.WHITE);
+        chart.getStyler().setLegendBackgroundColor(Color.WHITE);
+        chart.getStyler().setLegendBorderColor(Color.BLACK);
+        chart.getStyler().setChartFontColor(Color.BLACK);
+        chart.getStyler().setChartTitleBoxVisible(false);
+        chart.getStyler().setChartTitleBoxBorderColor(null);
+
+        chart.getStyler().setAxisTickPadding(0);
+        chart.getStyler().setXAxisMin(startDate);
+        chart.getStyler().setXAxisMax(endDate);
+        chart.getStyler().setYAxisMax(300.0);
+        chart.getStyler().setYAxisMin(0.0);
+        chart.getStyler().setAxisTickMarkLength(15);
+
+        chart.getStyler().setPlotMargin(20);
+
+        chart.getStyler().setChartTitleFont(new Font(Font.SERIF, Font.BOLD, 24));
+        chart.getStyler().setLegendFont(new Font(Font.SERIF, Font.PLAIN, 18));
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideSE);
+        chart.getStyler().setLegendSeriesLineLength(12);
+        chart.getStyler().setAxisTitleFont(new Font(Font.SANS_SERIF, Font.ITALIC, 18));
+        chart.getStyler().setAxisTickLabelsFont(new Font(Font.SERIF, Font.PLAIN, 11));
+        chart.getStyler().setDatePattern("MM-dd");
+        chart.getStyler().setDecimalPattern("#0");
+        chart.getStyler().setLocale(Locale.ENGLISH);
+        XYSeries series = chart.addSeries("Sunspot Data", xTruncData, yTruncData);
+        series.setLineColor(XChartSeriesColors.BLUE);
+        series.setLineStyle(SeriesLines.NONE);
+        new SwingWrapper<XYChart>(chart).displayChart();
     }
 }

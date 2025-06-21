@@ -27,10 +27,17 @@ public class Main {
             System.out.println("File not found: " + e.getMessage());
             System.exit(1);
         }
-        System.out.println(allData.getFirst());
-        System.out.println("\n\n");
-        System.out.println(allData.getLast());
+        double[] x = new double[allData.size()];
+        double[] y = new double[allData.size()];
 
+        for(int i = 0; i<allData.size(); i++){
+            x[i] = allData.get(i).getYrAsDec();
+        }
+        for (int j = 0; j<allData.size(); j++){
+            y[j] = allData.get(j).getSunspotNum();
+        }
+
+        Grapher grapher = new Grapher(x,y);
 
     }
 
@@ -67,6 +74,7 @@ public class Main {
                 //Adds character to StringBuilder if the character is not a space.
                 data.append(line.charAt(count));
             }else if(count == line.length()-1) {
+                //If the provisional index column is blank, append a '.' to the StringBuilder so that the data is compiled correctly
                 data.append('.');
                 stop = true;
             }else if(line.charAt(count) == ' ' && !data.isEmpty()){

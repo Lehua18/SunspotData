@@ -25,6 +25,7 @@ import java.util.Locale;
 import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Function;
 
 public class Grapher {
     //3D Grapher
@@ -75,9 +76,15 @@ public class Grapher {
         PolynomialCurveFitter fitter = PolynomialCurveFitter.create(10);
 //        fitter = fitter.getO
         double[] coefficients = fitter.fit(points);
-        for (double c : coefficients){
-            System.out.print(c+" ");
+        
+        ArrayList<Double> xApprox = new ArrayList<>();
+        ArrayList<Double> yApprox = new ArrayList<>();
+        for(double d = startDate; d<endDate; d+= 0.01){
+            xApprox.add(d);
+            yApprox.add(taylorApprox(d, coefficients));
+            
         }
+        
 
         //Create 2D graph
         XYChart chart = new XYChartBuilder().width(800).height(600).title("Sunspot Number Over Time").xAxisTitle("Time (years)").yAxisTitle("Sunspot Number").build();
@@ -111,9 +118,21 @@ public class Grapher {
         chart.getStyler().setDatePattern("MM-dd");
         chart.getStyler().setDecimalPattern("#0");
         chart.getStyler().setLocale(Locale.ENGLISH);
-        XYSeries series = chart.addSeries("Sunspot Data", xTruncData, yTruncData);
-        series.setLineColor(XChartSeriesColors.BLUE);
-        series.setLineStyle(SeriesLines.NONE);
+        XYSeries dataSeries = chart.addSeries("Sunspot Data", xTruncData, yTruncData);
+        XYSeries approxSeries = chart.addSeries("Approx Sunspot Data", xApprox, yApprox);
+        dataSeries.setLineColor(XChartSeriesColors.BLUE);
+        approxSeries.setLineColor(XChartSeriesColors.PURPLE);
+        approxSeries.setLineStyle(SeriesLines.SOLID);
+        approxSeries.setSmooth(true);
+        dataSeries.setLineStyle(SeriesLines.NONE);
         new SwingWrapper<XYChart>(chart).displayChart();
+    }
+    
+    public double taylorApprox(double x, double[] coeff){
+        double output = 0;
+        for(int b = coeff.length-1; b>=0; b--){
+            output+= coeff[b]*Math.pow(x,b);
+        }
+        return output;
     }
 }

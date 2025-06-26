@@ -36,9 +36,11 @@ public class Main {
         for (int j = 0; j<allData.size(); j++){
             y[j] = allData.get(j).getSunspotNum();
         }
-
-        Grapher grapher = new Grapher(x,y);
-
+        try {
+            Grapher grapher = new Grapher(x, y);
+        }catch (InterruptedException e){
+            System.out.println("Something went wrong: "+e);
+        }
     }
 
     //upload txt file

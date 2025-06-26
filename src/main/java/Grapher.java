@@ -13,9 +13,12 @@ import java.awt.*;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Grapher {
     private ArrayList<Double> coeff;
+    private Map<String, Boolean> vars = new HashMap<>();
 
     //3D Grapher
     public Grapher(double[] x, double[] y, double[] z) {
@@ -23,7 +26,7 @@ public class Grapher {
     }
 
     //2D Grapher
-    public Grapher(double[] x, double[] y){
+    public Grapher(double[] x, double[] y) throws InterruptedException{
         //Get endpoints
         Scanner scan = new Scanner(System.in);
         System.out.println("Please choose a starting year");
@@ -95,7 +98,7 @@ public class Grapher {
         //Creates a new array list with approximated values
         ArrayList<Double> xApprox = new ArrayList<>();
         ArrayList<Double> yApprox = new ArrayList<>();
-        int degree = 2;
+        int degree = 5;
         double center = xTruncData[xTruncData.length/2];
         for(double d = startDate; d<endDate; d+= 0.08){
             //Nullify any rounding errors
@@ -139,7 +142,7 @@ public class Grapher {
         chart.getStyler().setPlotMargin(20);
         chart.getStyler().setChartTitleFont(new Font(Font.SERIF, Font.BOLD, 24));
         chart.getStyler().setLegendFont(new Font(Font.SERIF, Font.PLAIN, 18));
-        chart.getStyler().setLegendPosition(Styler.LegendPosition.InsideSE);
+        chart.getStyler().setLegendPosition(Styler.LegendPosition.OutsideE);
         chart.getStyler().setLegendSeriesLineLength(12);
         chart.getStyler().setAxisTitleFont(new Font(Font.SANS_SERIF, Font.ITALIC, 18));
         chart.getStyler().setAxisTickLabelsFont(new Font(Font.SERIF, Font.PLAIN, 11));
@@ -178,7 +181,7 @@ public class Grapher {
         return output;
     }
 
-    public ArrayList<Double> taylorApproxOuter(int iterations, double[] xData, double[] yData, double center, double startDate, double endDate) {
+    public ArrayList<Double> taylorApproxOuter(int iterations, double[] xData, double[] yData, double center, double startDate, double endDate) throws InterruptedException {
         double total = 0;
        System.out.println("Center: "+center);
         int centerIndex = centerIndex(xData, center);
@@ -205,6 +208,7 @@ public class Grapher {
         coeff = new ArrayList<Double>();
         coeff.add(newYData[centerIndex]);
         double last = taylorApproxCoeff(iterations,newXdata,newYData,center);
+
         System.out.print("FINAL COEFFICIENTS: [");
         for(double co : coeff){
             System.out.print(co+", ");
@@ -227,8 +231,8 @@ public class Grapher {
 
     }
 
-    public double taylorApproxCoeff(int iterations, double[] xData, double[] yData, double center){
-
+    public double taylorApproxCoeff(int iterations, double[] xData, double[] yData, double center) throws InterruptedException {
+        Thread.sleep((long) (Math.random()*100));
 
         System.out.print(iterations+" xdata: [");
         for(double x : xData){
@@ -241,12 +245,16 @@ public class Grapher {
         }
         System.out.println("]");
         if(iterations == 1){
-            System.out.println("check");
-            coeff.add((yData[1] - yData[0])/(xData[1] - xData[0]));
+
+            if(!vars.get("1")) {
+                coeff.add((yData[1] - yData[0])/(xData[1] - xData[0]));
+                System.out.println("Iteration "+iterations+": "+((yData[1] - yData[0])/(xData[1] - xData[0])));
+                vars.put("1", true);
+            }
             return  (yData[1] - yData[0])/(xData[1] - xData[0]);
         }else{
-            System.out.println("notcheck");
             int centIndex = centerIndex(xData,center);
+            vars.put(""+(iterations-1), false);
             double next = ((taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, true),
                             arrayShortener(yData, centIndex, true), center) -
                     taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, false),
@@ -254,7 +262,13 @@ public class Grapher {
                     (((sum(arrayShortener(xData,centIndex,true)))/(iterations)) -
                     ((sum(arrayShortener(xData,centIndex,false)))/(iterations))))
             ;
-            coeff.add(next);
+            System.out.println(vars.get(""+iterations));
+
+            if(vars.get(""+iterations) == null || !vars.get(""+iterations)) {
+                System.out.println("Iteration "+iterations+": "+next);
+                coeff.add(next);
+                vars.put(""+iterations, true);
+            }
             return next;
 
         }

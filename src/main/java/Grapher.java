@@ -98,7 +98,7 @@ public class Grapher {
         //Creates a new array list with approximated values
         ArrayList<Double> xApprox = new ArrayList<>();
         ArrayList<Double> yApprox = new ArrayList<>();
-        int degree = 5;
+        int degree = 15;
         double center = xTruncData[xTruncData.length/2];
         for(double d = startDate; d<endDate; d+= 0.08){
             //Nullify any rounding errors
@@ -154,7 +154,7 @@ public class Grapher {
         XYSeries dataSeries = chart.addSeries("Sunspot Data", xTruncData, yTruncData);
         XYSeries approxSeries = chart.addSeries("Approx Sunspot Data", xApprox, taylorApproxOuter(degree,xTruncData,yTruncData,center,startDate,endDate));
         XYSeries futureSeries = chart.addSeries("After Sunspot Data", xAfterData,yAfterData);
-        XYSeries futureApproxSeries = chart.addSeries("Predicted Sunspot Data", xAfterApprox, taylorApproxOuter(degree,xTruncData,yTruncData,center,startDate,endDate));
+        XYSeries futureApproxSeries = chart.addSeries("Predicted Sunspot Data", xAfterApprox, taylorApproxOuter(degree,xTruncData,yTruncData,center,endDate,endApproxDate));
 
         //Style individual series
         dataSeries.setLineColor(XChartSeriesColors.BLUE);
@@ -205,9 +205,11 @@ public class Grapher {
         }
 
          centerIndex = centerIndex(newXdata, center);
-        coeff = new ArrayList<Double>();
-        coeff.add(newYData[centerIndex]);
-        double last = taylorApproxCoeff(iterations,newXdata,newYData,center);
+        if(coeff == null) {
+            coeff = new ArrayList<Double>();
+            coeff.add(newYData[centerIndex]);
+            double last = taylorApproxCoeff(iterations, newXdata, newYData, center);
+        }
 
         System.out.print("FINAL COEFFICIENTS: [");
         for(double co : coeff){
@@ -232,7 +234,7 @@ public class Grapher {
     }
 
     public double taylorApproxCoeff(int iterations, double[] xData, double[] yData, double center) throws InterruptedException {
-        Thread.sleep((long) (Math.random()*100));
+     //   Thread.sleep((long) (Math.random()*100));
 
         System.out.print(iterations+" xdata: [");
         for(double x : xData){
@@ -254,7 +256,9 @@ public class Grapher {
             return  (yData[1] - yData[0])/(xData[1] - xData[0]);
         }else{
             int centIndex = centerIndex(xData,center);
-            vars.put(""+(iterations-1), false);
+            if(vars.get(""+iterations) == null || !vars.get(""+iterations)) {
+                vars.put("" + (iterations - 1), false);
+            }
             double next = ((taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, true),
                             arrayShortener(yData, centIndex, true), center) -
                     taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, false),
@@ -262,7 +266,7 @@ public class Grapher {
                     (((sum(arrayShortener(xData,centIndex,true)))/(iterations)) -
                     ((sum(arrayShortener(xData,centIndex,false)))/(iterations))))
             ;
-            System.out.println(vars.get(""+iterations));
+//            System.out.println(vars.get(""+iterations));
 
             if(vars.get(""+iterations) == null || !vars.get(""+iterations)) {
                 System.out.println("Iteration "+iterations+": "+next);

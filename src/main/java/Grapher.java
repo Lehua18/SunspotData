@@ -216,23 +216,22 @@ public class Grapher {
     }
 
     public double taylorApproxCoeff(int iterations, double[] xData, double[] yData, double center) throws InterruptedException {
-     //   Thread.sleep((long) (Math.random()*100));
 
-        System.out.print(iterations+" xdata: [");
-        for(double x : xData){
-            System.out.print(x+", ");
-        }
-        System.out.println("]");
-        System.out.print("\t"+iterations+" ydata: [");
-        for(double x : yData){
-            System.out.print(x+", ");
-        }
-        System.out.println("]");
+//        System.out.print(iterations+" xdata: [");
+//        for(double x : xData){
+//            System.out.print(x+", ");
+//        }
+//        System.out.println("]");
+//        System.out.print("\t"+iterations+" ydata: [");
+//        for(double x : yData){
+//            System.out.print(x+", ");
+//        }
+//        System.out.println("]");
         if(iterations == 1){
 
             if(vars.get(""+iterations) == null || !vars.get("1")) {
                 coeff.add((yData[1] - yData[0])/(xData[1] - xData[0]));
-                System.out.println("Iteration "+iterations+": "+((yData[1] - yData[0])/(xData[1] - xData[0])));
+//                System.out.println("Iteration "+iterations+": "+((yData[1] - yData[0])/(xData[1] - xData[0])));
                 vars.put("1", true);
             }
             return  (yData[1] - yData[0])/(xData[1] - xData[0]);

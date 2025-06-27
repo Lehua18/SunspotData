@@ -1,11 +1,11 @@
-//3D Graph and stylers
-import com.rinearn.graph3d.RinearnGraph3D;
 
 //2D Graph and Stylers
 import org.knowm.xchart.*;
 import org.knowm.xchart.style.*;
 import org.knowm.xchart.style.colors.*;
 import org.knowm.xchart.style.lines.SeriesLines;
+import org.knowm.xchart.style.markers.Marker;
+import org.knowm.xchart.style.markers.SeriesMarkers;
 
 
 //General Imports
@@ -19,11 +19,6 @@ import java.util.Map;
 public class Grapher {
     private ArrayList<Double> coeff;
     private Map<String, Boolean> vars = new HashMap<>();
-
-    //3D Grapher
-    public Grapher(double[] x, double[] y, double[] z) {
-        RinearnGraph3D graph = new RinearnGraph3D();
-    }
 
     //2D Grapher
     public Grapher(double[] x, double[] y) throws InterruptedException{
@@ -85,28 +80,20 @@ public class Grapher {
             yAfterData[count] = y[l];
             count++;
         }
-//
-//        //Curve fitting
-//        Collection<WeightedObservedPoint> points = new ArrayList<>();
-//        for(int k = 0; k<xTruncData.length; k++){
-//            points.add(new WeightedObservedPoint(1, xTruncData[k], yTruncData[k]));
-//        }
-//        PolynomialCurveFitter fitter = PolynomialCurveFitter.create(15);
-////        fitter = fitter.getO
-//        double[] coefficients = fitter.fit(points);
+
 
         //Creates a new array list with approximated values
         ArrayList<Double> xApprox = new ArrayList<>();
-        ArrayList<Double> yApprox = new ArrayList<>();
-        int degree = 15;
+        System.out.println("What degree would you like the Taylor approximation to be?");
+        int degree = Integer.parseInt(scan.nextLine());
         double center = xTruncData[xTruncData.length/2];
         for(double d = startDate; d<endDate; d+= 0.08){
             //Nullify any rounding errors
             d*=100;
             d= Math.round(d);
             d/=100.0;
+
             xApprox.add(d);
-            //System.out.println("d: "+d);
             
         }
         ArrayList<Double> xAfterApprox = new ArrayList<>();
@@ -159,26 +146,21 @@ public class Grapher {
         //Style individual series
         dataSeries.setLineColor(XChartSeriesColors.BLUE);
         dataSeries.setLineStyle(SeriesLines.NONE);
+        dataSeries.setMarker(SeriesMarkers.CIRCLE);
         futureSeries.setLineColor(XChartSeriesColors.GREEN);
         futureSeries.setLineStyle(SeriesLines.NONE);
+        futureSeries.setMarker(SeriesMarkers.PLUS);
         approxSeries.setLineStyle(SeriesLines.SOLID);
-        approxSeries.setLineColor(XChartSeriesColors.PURPLE);
+        approxSeries.setLineColor(XChartSeriesColors.YELLOW);
         approxSeries.setSmooth(true);
-        futureApproxSeries.setLineColor(XChartSeriesColors.RED);
+        approxSeries.setMarker(SeriesMarkers.NONE);
+        futureApproxSeries.setLineColor(XChartSeriesColors.GREEN);
         futureApproxSeries.setLineStyle(SeriesLines.SOLID);
         futureApproxSeries.setSmooth(true);
+        futureApproxSeries.setMarker(SeriesMarkers.NONE);
 
         //display chart
         new SwingWrapper<XYChart>(chart).displayChart();
-    }
-
-    //Get coefficients of least squares approx method
-    public double squaresApprox(double x, double[] coeff){
-        double output = 0;
-        for(int b = coeff.length-1; b>=0; b--){
-            output+= coeff[b]*Math.pow(x,b);
-        }
-        return output;
     }
 
     public ArrayList<Double> taylorApproxOuter(int iterations, double[] xData, double[] yData, double center, double startDate, double endDate) throws InterruptedException {
@@ -248,7 +230,7 @@ public class Grapher {
         System.out.println("]");
         if(iterations == 1){
 
-            if(!vars.get("1")) {
+            if(vars.get(""+iterations) == null || !vars.get("1")) {
                 coeff.add((yData[1] - yData[0])/(xData[1] - xData[0]));
                 System.out.println("Iteration "+iterations+": "+((yData[1] - yData[0])/(xData[1] - xData[0])));
                 vars.put("1", true);

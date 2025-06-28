@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class DataPoint {
+    //Sets all variables to initial values
     private int year = -1;
     private int month = -1;
     private int day = -1;
@@ -20,6 +21,7 @@ public class DataPoint {
 
 
   public DataPoint(ArrayList<String> data){
+      //Creates a data point if 'daily' data is used
       if(data.size() == 8){
           year = Integer.parseInt(data.get(0));
           month = Integer.parseInt(data.get(1));
@@ -31,6 +33,7 @@ public class DataPoint {
           provInd = data.get(7);
           type = "daily";
 
+      //Creates a datapoint if 'monthly' or 'monthly smoothed' data is used
       }else if(data.size() == 7){
           year = Integer.parseInt(data.get(0));
           month = Integer.parseInt(data.get(1));
@@ -40,6 +43,8 @@ public class DataPoint {
           numObs = Integer.parseInt(data.get(5));
           provInd = data.get(6);
           type = "monthly";
+
+      //Creates data point if 'yearly' data is used
       }else if(data.size() == 5){
           yrAsDec = Double.parseDouble(data.get(0));
           sunspotNum = Double.parseDouble(data.get(1));
@@ -47,6 +52,8 @@ public class DataPoint {
           numObs = Integer.parseInt(data.get(3));
           provInd = data.get(4);
           type = "yearly";
+
+      //Creates data point if 'daily hemispheric' data is used
       } else if (data.size() == 14) {
           year = Integer.parseInt(data.get(0));
           month = Integer.parseInt(data.get(1));
@@ -63,6 +70,8 @@ public class DataPoint {
           sNumObs = Integer.parseInt(data.get(12));
           provInd = data.get(13);
           type = "hemDaily";
+
+      //Creates data point if 'monthly hemispheric' or 'monthly smoothed hemispheric' data is used
       }else if(data.size() == 13){
           year = Integer.parseInt(data.get(0));
           month = Integer.parseInt(data.get(1));
@@ -79,6 +88,8 @@ public class DataPoint {
           provInd = data.get(12);
           type = "hemMonthly";
       }
+
+      //'true' (is provisional data) if provInd = *, 'false' (not provisional data) if provInd = anything else
       provBool = provInd.equals("*");
 
   }

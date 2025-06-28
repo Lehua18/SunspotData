@@ -216,30 +216,28 @@ public class Grapher {
     }
 
     public double taylorApproxCoeff(int iterations, double[] xData, double[] yData, double center) throws InterruptedException {
-
-//        System.out.print(iterations+" xdata: [");
-//        for(double x : xData){
-//            System.out.print(x+", ");
-//        }
-//        System.out.println("]");
-//        System.out.print("\t"+iterations+" ydata: [");
-//        for(double x : yData){
-//            System.out.print(x+", ");
-//        }
-//        System.out.println("]");
+        //base case
         if(iterations == 1){
-
+            //Checks that no other coefficient of iteration 1 has been added
             if(vars.get(""+iterations) == null || !vars.get("1")) {
+                //adds as coefficient (slope formula)
                 coeff.add((yData[1] - yData[0])/(xData[1] - xData[0]));
-//                System.out.println("Iteration "+iterations+": "+((yData[1] - yData[0])/(xData[1] - xData[0])));
+                //Notes that a coefficient of iteration 1 has been added
                 vars.put("1", true);
             }
+            //Slope formula
             return  (yData[1] - yData[0])/(xData[1] - xData[0]);
+
+        //recursive case
         }else{
             int centIndex = centerIndex(xData,center);
+
+            //Creates new flag for next iteration if one has not already been created
             if(vars.get(""+iterations) == null || !vars.get(""+iterations)) {
                 vars.put("" + (iterations - 1), false);
             }
+
+            //Recursive function (derived from slope formula)
             double next = ((taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, true),
                             arrayShortener(yData, centIndex, true), center) -
                     taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, false),
@@ -247,8 +245,8 @@ public class Grapher {
                     (((sum(arrayShortener(xData,centIndex,true)))/(iterations)) -
                     ((sum(arrayShortener(xData,centIndex,false)))/(iterations))))
             ;
-//            System.out.println(vars.get(""+iterations));
 
+            //Checks that no other coefficient of iteration 'iteration' has been added
             if(vars.get(""+iterations) == null || !vars.get(""+iterations)) {
                 System.out.println("Iteration "+iterations+": "+next);
                 coeff.add(next);
@@ -260,6 +258,7 @@ public class Grapher {
     }
 
 
+    //Finds y value based on taylor approximation
     public double taylorApproxSum(double num, double center){
         double total = 0;
         double difference = num-center;

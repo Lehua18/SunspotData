@@ -10,6 +10,7 @@ public class Main {
     public static void main(String[] args) {
         ArrayList<DataPoint> allData = null;
         try {
+            //Create reader with uploaded file
             Scanner scan = new Scanner(uploadTxtFile());
             allData = new ArrayList<>();
             do {
@@ -17,25 +18,37 @@ public class Main {
                 ArrayList<String> dataPoint = new ArrayList<>();
                 String line = scan.nextLine();
                 int length = line.length();
+
+                //Adds individual data points to arraylist
                 while(count< length){
                     dataPoint.add(getValuesFromTxt(line));
                 }
+
+                //Uses arraylist to construct a new Datapoint object that holds all relevant information related to the point, and adds point to overall list
                 allData.add(new DataPoint(dataPoint));
 
+            //Checks if txt file has another line
             } while (scan.hasNext());
+
+        //Ends program if file is not uploaded
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e.getMessage());
             System.exit(1);
         }
-        double[] x = new double[allData.size()];
-        double[] y = new double[allData.size()];
 
+        //Set x values to year as decimal values
+        double[] x = new double[allData.size()];
         for(int i = 0; i<allData.size(); i++){
             x[i] = allData.get(i).getYrAsDec();
         }
+
+        //Set y values to sunspot number values
+        double[] y = new double[allData.size()];
         for (int j = 0; j<allData.size(); j++){
             y[j] = allData.get(j).getSunspotNum();
         }
+
+        //Create a graph of year vs sunspot number
         try {
             Grapher grapher = new Grapher(x, y);
         }catch (InterruptedException e){
@@ -65,6 +78,7 @@ public class Main {
         }
     }
 
+    //Gets next value from txt line
     public static String getValuesFromTxt(String line) {
         boolean stop = false;
         StringBuilder data = new StringBuilder();

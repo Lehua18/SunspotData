@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class Grapher {
     private ArrayList<Double> coeff;
     private Map<String, Boolean> vars = new HashMap<>();

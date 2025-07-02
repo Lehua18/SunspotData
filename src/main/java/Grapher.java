@@ -192,7 +192,7 @@ public class Grapher {
             }
         } else {
             int diff = iterations / 2;
-            for (int i = centerIndex - diff; i <= centerIndex + diff + 1; i++) {
+            for (int i = centerIndex - diff; i <= centerIndex + diff ; i++) {
                 newXdata[count] = xData[i];
                 newYData[count] = yData[i];
                 count++;

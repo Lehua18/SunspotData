@@ -325,4 +325,11 @@ public class Grapher {
         }
         return total;
     }
+
+    public String getTime(){
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String time = now.format(formatter);
+        return time;
+    }
 }

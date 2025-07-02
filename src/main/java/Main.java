@@ -8,10 +8,11 @@ import java.util.ArrayList;
 public class Main {
     private static int count;
     public static void main(String[] args) {
+        String inputFile = args[0];
         ArrayList<DataPoint> allData = null;
         try {
             //Create reader with uploaded file
-            Scanner scan = new Scanner(uploadTxtFile());
+            Scanner scan = new Scanner(new File(inputFile));
             allData = new ArrayList<>();
             do {
                 count = 0;

@@ -200,6 +200,7 @@ public class Grapher {
         }
 
          centerIndex = centerIndex(newXdata, center);
+        System.out.println("Center index "+centerIndex);
         if(coeff == null) {
             coeff = new ArrayList<Double>();
             coeff.add(newYData[centerIndex]);

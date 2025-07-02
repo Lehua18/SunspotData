@@ -163,7 +163,7 @@ public class Grapher {
         futureApproxSeries.setSmooth(true);
         futureApproxSeries.setMarker(SeriesMarkers.NONE);
         try {
-            BitmapEncoder.saveBitmap(chart, "chart", BitmapFormat.PNG);
+            BitmapEncoder.saveBitmap(chart, getTime(), BitmapFormat.PNG);
         } catch (IOException e) {
             System.out.println(e.getMessage());
             throw new RuntimeException(e);

@@ -51,7 +51,7 @@ public class Main {
 
         //Create a graph of year vs sunspot number
         try {
-            Grapher grapher = new Grapher(x, y);
+            Grapher grapher = new Grapher(x, y,args);
         }catch (InterruptedException e){
             System.out.println("Something went wrong: "+e);
         }

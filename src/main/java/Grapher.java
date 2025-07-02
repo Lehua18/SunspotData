@@ -25,15 +25,15 @@ public class Grapher {
     private Map<String, Boolean> vars = new HashMap<>();
 
     //2D Grapher
-    public Grapher(double[] x, double[] y) throws InterruptedException{
+    public Grapher(double[] x, double[] y, String[] args) throws InterruptedException{
         //Get endpoints
         Scanner scan = new Scanner(System.in);
         System.out.println("Please choose a starting year");
-        double startDate = Double.parseDouble(scan.nextLine());
+        double startDate = Double.parseDouble(args[1]);
         System.out.println("Please choose an ending year");
-        double endDate = Double.parseDouble(scan.nextLine());
+        double endDate = Double.parseDouble(args[2]);
         System.out.println("Please enter a ending year for the approximation");
-        double endApproxDate = Double.parseDouble(scan.nextLine());
+        double endApproxDate = Double.parseDouble(args[3]);
 
         //find approx index of endpoints
         int startIndex = -1;
@@ -89,7 +89,7 @@ public class Grapher {
         //Creates a new array list with approximated values
         ArrayList<Double> xApprox = new ArrayList<>();
         System.out.println("What degree would you like the Taylor approximation to be?");
-        int degree = Integer.parseInt(scan.nextLine());
+        int degree = Integer.parseInt(args[4]);
         double center = xTruncData[xTruncData.length/2];
         for(double d = startDate; d<endDate; d+= 0.08){
             //Nullify any rounding errors

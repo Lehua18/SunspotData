@@ -180,6 +180,7 @@ public class Grapher {
         double total = 0;
        System.out.println("Center: "+center);
         int centerIndex = centerIndex(xData, center);
+                System.out.println("Center index "+centerIndex);
         double[] newXdata = new double[iterations + 1];
         double[] newYData = new double[iterations + 1];
         int count = 0;
@@ -200,7 +201,7 @@ public class Grapher {
         }
 
          centerIndex = centerIndex(newXdata, center);
-        System.out.println("Center index "+centerIndex);
+
         if(coeff == null) {
             coeff = new ArrayList<Double>();
             coeff.add(newYData[centerIndex]);

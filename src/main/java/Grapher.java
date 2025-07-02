@@ -91,7 +91,7 @@ public class Grapher {
         //Creates a new array list with approximated values
         ArrayList<Double> xApprox = new ArrayList<>();
         System.out.println("What degree would you like the Taylor approximation to be?");
-        int degree = Integer.parseInt(args[3]);
+        int degree = Integer.parseInt(args[4]);
         double center = xTruncData[xTruncData.length/2];
         for(double d = startDate; d<endDate; d+= 0.08){
             //Nullify any rounding errors
@@ -193,7 +193,7 @@ public class Grapher {
             }
         } else {
             int diff = iterations / 2;
-            for (int i = centerIndex - diff; i <= centerIndex + diff ; i++) {
+            for (int i = centerIndex - diff; i <= centerIndex + diff +1; i++) {
                 newXdata[count] = xData[i];
                 newYData[count] = yData[i];
                 count++;

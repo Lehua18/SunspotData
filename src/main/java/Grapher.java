@@ -6,10 +6,13 @@ import org.knowm.xchart.style.colors.*;
 import org.knowm.xchart.style.lines.SeriesLines;
 import org.knowm.xchart.style.markers.Marker;
 import org.knowm.xchart.style.markers.SeriesMarkers;
+import org.knowm.xchart.BitmapEncoder;
+import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 
 
 //General Imports
 import java.awt.*;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -159,9 +162,16 @@ public class Grapher {
         futureApproxSeries.setLineStyle(SeriesLines.SOLID);
         futureApproxSeries.setSmooth(true);
         futureApproxSeries.setMarker(SeriesMarkers.NONE);
+        try {
+            BitmapEncoder.saveBitmap(chart, "chart", BitmapFormat.PNG);
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+            throw new RuntimeException(e);
+        }
+        System.exit(0);
 
         //display chart
-        new SwingWrapper<XYChart>(chart).displayChart();
+     //   new SwingWrapper<XYChart>(chart).displayChart();
     }
 
     public ArrayList<Double> taylorApproxOuter(int iterations, double[] xData, double[] yData, double center, double startDate, double endDate) throws InterruptedException {

@@ -82,7 +82,7 @@ public class Grapher {
         double[] xAfterData = new double[endOfApproxDataIndex-endIndex+1];
         double[] yAfterData = new double[endOfApproxDataIndex-endIndex+1];
         count = 0;
-        for(int l = endIndex; l<=endOfApproxDataIndex; l++){
+        for(int l = endIndex; l<endOfApproxDataIndex; l++){
             xAfterData[count] = x[l];
             yAfterData[count] = y[l];
             count++;

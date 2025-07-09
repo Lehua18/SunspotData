@@ -4,7 +4,6 @@ import org.knowm.xchart.*;
 import org.knowm.xchart.style.*;
 import org.knowm.xchart.style.colors.*;
 import org.knowm.xchart.style.lines.SeriesLines;
-import org.knowm.xchart.style.markers.Marker;
 import org.knowm.xchart.style.markers.SeriesMarkers;
 import org.knowm.xchart.BitmapEncoder;
 import org.knowm.xchart.BitmapEncoder.BitmapFormat;
@@ -14,22 +13,24 @@ import org.knowm.xchart.BitmapEncoder.BitmapFormat;
 import java.awt.*;
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.math.BigDecimal;
+import java.math.MathContext;
 
 
 public class Grapher {
-    private ArrayList<Double> coeff;
+    private ArrayList<BigDecimal> coeff;
     private Map<String, Boolean> vars = new HashMap<>();
+    private final MathContext mc = new MathContext(100);
 
     //2D Grapher
     public Grapher(double[] x, double[] y, String[] args) throws InterruptedException{
         //Get endpoints
-        Scanner scan = new Scanner(System.in);
+
         System.out.println("Please choose a starting year");
         double startDate = Double.parseDouble(args[1]);
         System.out.println("Please choose an ending year");
@@ -81,7 +82,7 @@ public class Grapher {
         double[] xAfterData = new double[endOfApproxDataIndex-endIndex+1];
         double[] yAfterData = new double[endOfApproxDataIndex-endIndex+1];
         count = 0;
-        for(int l = endIndex; l<endOfApproxDataIndex; l++){
+        for(int l = endIndex; l<=endOfApproxDataIndex; l++){
             xAfterData[count] = x[l];
             yAfterData[count] = y[l];
             count++;
@@ -176,11 +177,10 @@ public class Grapher {
      //   new SwingWrapper<XYChart>(chart).displayChart();
     }
 
-    public ArrayList<Double> taylorApproxOuter(int iterations, double[] xData, double[] yData, double center, double startDate, double endDate) throws InterruptedException {
-        double total = 0;
+    public ArrayList<BigDecimal> taylorApproxOuter(int iterations, double[] xData, double[] yData, double center, double startDate, double endDate) {
+        BigDecimal total;
        System.out.println("Center: "+center);
         int centerIndex = centerIndex(xData, center);
-                System.out.println("Center index "+centerIndex);
         double[] newXdata = new double[iterations + 1];
         double[] newYData = new double[iterations + 1];
         int count = 0;
@@ -193,7 +193,7 @@ public class Grapher {
             }
         } else {
             int diff = iterations / 2;
-            for (int i = centerIndex - diff; i <= centerIndex + diff +1; i++) {
+            for (int i = centerIndex - diff; i <= centerIndex + diff + 1; i++) {
                 newXdata[count] = xData[i];
                 newYData[count] = yData[i];
                 count++;
@@ -201,19 +201,18 @@ public class Grapher {
         }
 
          centerIndex = centerIndex(newXdata, center);
-
         if(coeff == null) {
-            coeff = new ArrayList<Double>();
-            coeff.add(newYData[centerIndex]);
-            double last = taylorApproxCoeff(iterations, newXdata, newYData, center);
+            coeff = new ArrayList<>();
+            coeff.add(BigDecimal.valueOf(newYData[centerIndex]));
+            BigDecimal last = taylorApproxCoeff(iterations, newXdata, newYData, center);
         }
 
         System.out.print("FINAL COEFFICIENTS: [");
-        for(double co : coeff){
+        for(BigDecimal co : coeff){
             System.out.print(co+", ");
         }
         System.out.println("]");
-        ArrayList<Double> points = new ArrayList<>();
+        ArrayList<BigDecimal> points = new ArrayList<>();
         for(double num = startDate; num<endDate; num+=0.08) {
             //Nullify rounding error
             num*=100;
@@ -230,18 +229,18 @@ public class Grapher {
 
     }
 
-    public double taylorApproxCoeff(int iterations, double[] xData, double[] yData, double center) throws InterruptedException {
+    public BigDecimal taylorApproxCoeff(int iterations, double[] xData, double[] yData, double center) {
         //base case
         if(iterations == 1){
             //Checks that no other coefficient of iteration 1 has been added
             if(vars.get(""+iterations) == null || !vars.get("1")) {
                 //adds as coefficient (slope formula)
-                coeff.add((yData[1] - yData[0])/(xData[1] - xData[0]));
+                coeff.add(BigDecimal.valueOf((yData[1] - yData[0])/(xData[1] - xData[0])));
                 //Notes that a coefficient of iteration 1 has been added
                 vars.put("1", true);
             }
             //Slope formula
-            return  (yData[1] - yData[0])/(xData[1] - xData[0]);
+            return  BigDecimal.valueOf((yData[1] - yData[0])/(xData[1] - xData[0]));
 
         //recursive case
         }else{
@@ -253,13 +252,13 @@ public class Grapher {
             }
 
             //Recursive function (derived from slope formula)
-            double next = ((taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, true),
-                            arrayShortener(yData, centIndex, true), center) -
-                    taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, false),
-                            arrayShortener(yData, centIndex, false), center))/
-                    (((sum(arrayShortener(xData,centIndex,true)))/(iterations)) -
-                    ((sum(arrayShortener(xData,centIndex,false)))/(iterations))))
-            ;
+            BigDecimal next = ((taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, true),
+                            arrayShortener(yData, centIndex, true), center).subtract(
+                                    taylorApproxCoeff(iterations - 1, arrayShortener(xData,centIndex, false),
+                            arrayShortener(yData, centIndex, false), center)))).divide(
+                                    BigDecimal.valueOf((sum(arrayShortener(xData,centIndex,true)))/(iterations)-
+                    ((sum(arrayShortener(xData,centIndex,false)))/(iterations))),mc);
+
 
             //Checks that no other coefficient of iteration 'iteration' has been added
             if(vars.get(""+iterations) == null || !vars.get(""+iterations)) {
@@ -274,11 +273,11 @@ public class Grapher {
 
 
     //Finds y value based on taylor approximation
-    public double taylorApproxSum(double num, double center){
-        double total = 0;
-        double difference = num-center;
+    public BigDecimal taylorApproxSum(double num, double center){
+        BigDecimal total = BigDecimal.valueOf(0);
+        BigDecimal difference = BigDecimal.valueOf(num-center);
         for(int i = 0; i<coeff.size(); i++){
-            total+= ((coeff.get(i)*Math.pow(difference,i))/factorial(i));
+            total = total.add((coeff.get(i).multiply(difference.pow(i)))).divide(factorial(i), mc);
         }
         return total;
     }
@@ -320,11 +319,11 @@ public class Grapher {
     }
 
     //Takes the factorial of a number
-    public int factorial(int num){
-        int total = 1;
+    public BigDecimal factorial(int num){
+        BigDecimal total = BigDecimal.valueOf(1);
         if(num != 0 && num != 1) {
             for (int i = num; i > 0; i--) {
-                total *= i;
+                total = total.multiply(BigDecimal.valueOf(i));
             }
         }
         return total;
